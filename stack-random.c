@@ -1,61 +1,61 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Õ»Ö¡½á¹¹Ìå£¬¼ÙÉèËùÓÐº¯ÊýµÄÕ»Ö¡¶¼Ò»Ñù£¬¶¼½ö°üº¬3¸ö²¼¾Ö±äÁ¿
+// æ ˆå¸§ç»“æž„ä½“ï¼Œå‡è®¾æ‰€æœ‰å‡½æ•°çš„æ ˆå¸§éƒ½ä¸€æ ·ï¼Œéƒ½ä»…åŒ…å«3ä¸ªå¸ƒå±€å˜é‡
 typedef struct Frame {
-    struct Frame* pre; // Ö¸ÏòÉÏÒ»¸öÕ»Ö¡
+    struct Frame* pre; // æŒ‡å‘ä¸Šä¸€ä¸ªæ ˆå¸§
     int local1;
     int local2;
     int local3;
 } frame;
 
-// ¶ÑÕ»
+// å †æ ˆ
 typedef struct Stack {
-    frame* base; //Õ»µ×
-    frame* top; // Õ»¶¥
-    int size; //¶ÑÕ»´óÐ¡
+    frame* base; //æ ˆåº•
+    frame* top; // æ ˆé¡¶
+    int size; //å †æ ˆå¤§å°
 }stack;
 
-void initStack(stack* stack); //³õÊ¼»¯
+void initStack(stack* stack); //åˆå§‹åŒ–
 void push(stack* mystack, frame* nextFrame);
 void pop(stack* mystack);
 void iterate(stack *mystack);
 int main(int argc, char const *argv[]) {
-    // ¶¨ÒåÒ»¸ö¶ÑÕ»
+    // å®šä¹‰ä¸€ä¸ªå †æ ˆ
     stack* mystack = (stack*)malloc(sizeof(struct Stack));
     printf("sizeof(struct Frame) = %lu\n", sizeof(struct Frame));
 
-    // ³õÊ¼»¯¶ÑÕ»
+    // åˆå§‹åŒ–å †æ ˆ
     initStack(mystack);
 
-    // Ñ¹ÈëµÚ1¸öÕ»Ö¡
+    // åŽ‹å…¥ç¬¬1ä¸ªæ ˆå¸§
     frame* myframe = (frame*)malloc(sizeof(struct Frame));
-    printf("µ±Ç°Õ»Ö¡ÆðÊ¼µØÖ·ÊÇ: %p\n", myframe);
+    printf("å½“å‰æ ˆå¸§èµ·å§‹åœ°å€æ˜¯: %p\n", myframe);
     myframe->local1 = 1;
     myframe->local2 = 2;
     myframe->local3 = 3;
     push(mystack, myframe);
 
-    // Ñ¹ÈëµÚ2¸öÕ»Ö¡
+    // åŽ‹å…¥ç¬¬2ä¸ªæ ˆå¸§
     myframe = (frame*)malloc(sizeof(struct Frame));
-    printf("µ±Ç°Õ»Ö¡ÆðÊ¼µØÖ·ÊÇ: %p\n", myframe);
+    printf("å½“å‰æ ˆå¸§èµ·å§‹åœ°å€æ˜¯: %p\n", myframe);
     myframe->local1 = 5;
     myframe->local2 = 6;
     myframe->local3 = 7;
     push(mystack, myframe);
 
-    // Ñ¹ÈëµÚ3¸öÕ»Ö¡
+    // åŽ‹å…¥ç¬¬3ä¸ªæ ˆå¸§
     myframe = (frame*)malloc(sizeof(struct Frame));
-    printf("µ±Ç°Õ»Ö¡ÆðÊ¼µØÖ·ÊÇ: %p\n", myframe);
+    printf("å½“å‰æ ˆå¸§èµ·å§‹åœ°å€æ˜¯: %p\n", myframe);
     myframe->local1 = 8;
     myframe->local2 = 9;
     myframe->local3 = 10;
     push(mystack, myframe);
 
-    // ±éÀú¶ÑÕ»
+    // éåŽ†å †æ ˆ
     iterate(mystack);
 
-    // ³öÕ»
+    // å‡ºæ ˆ
     pop(mystack);
     iterate(mystack);
 
@@ -69,55 +69,55 @@ int main(int argc, char const *argv[]) {
 
     return 0;
 }
-// ³õÊ¼»¯¶ÑÕ»
+// åˆå§‹åŒ–å †æ ˆ
 void initStack(stack *stack) {
     stack->base = NULL;
     stack->top = NULL;
     stack->size = 0;
 }
-// Ñ¹Õ»
+// åŽ‹æ ˆ
 void push(stack* mystack, frame *nextFrame) {
-    // Èç¹ûµ±Ç°¶ÑÕ»Îª¿Õ£¬Ôò½«Õ»¶¥ºÍÕ»µ×Í¬Ê±Ö¸ÏòµÚÒ»¸öÕ»Ö¡
+    // å¦‚æžœå½“å‰å †æ ˆä¸ºç©ºï¼Œåˆ™å°†æ ˆé¡¶å’Œæ ˆåº•åŒæ—¶æŒ‡å‘ç¬¬ä¸€ä¸ªæ ˆå¸§
     if (mystack->size == 0) {
         mystack->base = nextFrame;
         mystack->top = nextFrame;
     }
 
-    nextFrame->pre = mystack->top; // µ±Ç°Õ»Ö¡µÄÉÏÒ»¸öÕ»Ö¡ÊÇÕ»¶¥
-    mystack->top = nextFrame; // Õ»¶¥±ä³ÉÁËµ±Ç°Õ»Ö¡
+    nextFrame->pre = mystack->top; // å½“å‰æ ˆå¸§çš„ä¸Šä¸€ä¸ªæ ˆå¸§æ˜¯æ ˆé¡¶
+    mystack->top = nextFrame; // æ ˆé¡¶å˜æˆäº†å½“å‰æ ˆå¸§
 
-    mystack->size++;// ½«¶ÑÕ»ÊýÁ¿¼Ó1
+    mystack->size++;// å°†å †æ ˆæ•°é‡åŠ 1
 }
 
-// ³öÕ»
+// å‡ºæ ˆ
 void pop(stack* mystack) {
     int size = mystack->size;
     if (size == 0) {
-        printf("%s\n", "µ±Ç°¶ÑÕ»Îª¿Õ,²»ÄÜ³öÕ»");
+        printf("%s\n", "å½“å‰å †æ ˆä¸ºç©º,ä¸èƒ½å‡ºæ ˆ");
         return ;
     }
 
-    frame *currentFrame = mystack->top; // »ñÈ¡µ±Ç°¶ÑÕ»¶¥²¿Õ»Ö¡
-    mystack->top = mystack->top->pre; // ½«µ±Ç°Õ»¶¥Ö¸ÏòÉÏÒ»¸öÕ»Ö¡
+    frame *currentFrame = mystack->top; // èŽ·å–å½“å‰å †æ ˆé¡¶éƒ¨æ ˆå¸§
+    mystack->top = mystack->top->pre; // å°†å½“å‰æ ˆé¡¶æŒ‡å‘ä¸Šä¸€ä¸ªæ ˆå¸§
 
-    // ÊÍ·ÅÕ»¶¥Õ»Ö¡
+    // é‡Šæ”¾æ ˆé¡¶æ ˆå¸§
     free(currentFrame);
     mystack->size--;
-    printf("³É¹¦µ¯³öÒ»¸öÕ»¶¥Õ»Ö¡\n\n");
+    printf("æˆåŠŸå¼¹å‡ºä¸€ä¸ªæ ˆé¡¶æ ˆå¸§\n\n");
 }
 
-// ±éÀú¶ÑÕ»
+// éåŽ†å †æ ˆ
 void iterate(stack* mystack) {
     if (mystack->size == 0) {
-        printf("%s\n", "µ±Ç°¶ÑÕ»Îª¿Õ£¬±éÀúÖÕÖ¹");
+        printf("%s\n", "å½“å‰å †æ ˆä¸ºç©ºï¼ŒéåŽ†ç»ˆæ­¢");
         return;
     }
 
     int size = mystack->size;
-    printf("*****************************µ±Ç°¶ÑÕ»¹²ÓÐ %d ¸öÕ»Ö¡*****************************\n",size);
+    printf("*****************************å½“å‰å †æ ˆå…±æœ‰ %d ä¸ªæ ˆå¸§*****************************\n",size);
     frame *currentFrame = mystack->top;
     while (size > 0) {
-        printf("µ±Ç°ÊÇµÚ %d ¸öÕ»Ö¡\n", size);
+        printf("å½“å‰æ˜¯ç¬¬ %d ä¸ªæ ˆå¸§\n", size);
         printf("    local1 = %d\]n", currentFrame->local1);
         printf("    local2 = %d\]n", currentFrame->local2);
         printf("    local3 = %d\]n", currentFrame->local3);
